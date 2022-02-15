@@ -1,0 +1,5 @@
+{
+    "require": {
+        "cobaltgrid/vatsim-stand-status": "^2.1"
+    }
+}
