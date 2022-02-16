@@ -171,7 +171,7 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
             L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 17,
                 subdomains:['mt0','mt1','mt2','mt3'],
-                attribution: 'Data &copy; VATSIM Scandinavia &copy; OpenStreetMap Contributors'
+                attribution: 'Data &copy; VATSCA, OpenStreetMap/OurAirports Contributors'
             }).addTo(map);
 
             <?php
