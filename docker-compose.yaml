@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  web:
+    container_name: stands
+    image: vatsca/apache:php-7.4
+    ports:
+        - 5060:80
+        - 5061:443
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+    volumes:
+      - ./:/var/www/html
+      - ./apache:/var/www/logs
