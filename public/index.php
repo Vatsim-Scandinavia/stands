@@ -17,30 +17,37 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
     <head>
         <title>Stands | VATSIM Scandinavia</title> 
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link href="style.css" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+        <script src="js/leaflet-tilelayer-colorfilter.min.js"></script>
 
         <!-- GMaps & Labels -->
         <script src="https://maps.googleapis.com/maps/api/js?key="></script>
         <script src="js/maplabel-min.js"></script>        
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="/">Stands</a>
+
+                <a class="navbar-brand" href="/">
+                    <img src="img/division-square.png" alt="" height="25" class="d-inline-block align-text-top">
+                    Stands
+                </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Overview</a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Denmark
@@ -86,30 +93,24 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <input id="search" name="icao" class="form-control form-control-sm" type="search" placeholder="Search for ICAO" aria-label="Search">
                 </form>
                 </div>
             </div>
         </nav>
 
+        <div id="map"></div>
+
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div id="map" style="height: 500px;width: 100%;"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col d-flex flex-column justify-content-center">
-                    <h5>All Stands</h5>
-                    <i>Stand Data &copy; OpenStreetMap Contributors</i>
-                    <table id="standsTable" class="table table-responsive table-sm text-center align-self-center">
+            <!--
+            <div class="row mt-4">
+                <div class="col d-flex flex-column justify-content-center">                   
+                    <table id="standsTable" class="table table-responsive table-sm text-center align-self-center table-striped">
                         <thead>
                         <tr>
                             <th>Stand</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Occupier</th>
+                            <th>Category</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -118,9 +119,8 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
                                     echo '
                                     <tr>
                                         <td>'.$stand->getName().'</td>
-                                        <td>'.$stand->latitude.'</td>
-                                        <td>'.$stand->longitude.'</td>
-                                        <td>'.($stand->isOccupied() ? $stand->occupier->callsign : null).'</td>
+                                        <td>C</td>
+                                        <td>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</td>
                                     </tr>
                                     ';
                                 }
@@ -128,59 +128,39 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <footer>
-            hei
+            <a href="https://vatsim-scandinavia.org" target="_blank">
+                <img src="img/vatsca-logo-negative.svg" height="75">
+            </a>
         </footer>
 
         <!-- Map Script -->
         <script>
-            var center = {lat:60.28909078470454, lng: 5.227381717245824};
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 14,
-                mapTypeId: 'satellite',
-                center: center,
-                disableDefaultUI: true
+            var map = L.map('map').setView([60.28909078470454, 5.227381717245824], 17);
+            L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 17,
+                subdomains:['mt0','mt1','mt2','mt3'],
+                attribution: 'Data &copy; VATSIM Scandinavia &copy; OpenStreetMap Contributors'
+            }).addTo(map);
 
-            });
-            
             <?php
                 foreach($StandStatus->stands() as $stand){
                     echo '
-                    new google.maps.Circle({
-                        strokeColor: '.($stand->isOccupied() ? '"#FF0000"' : '"#00FF00"').',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '.($stand->isOccupied() ? '"#FF0000"' : '"#00FF00"').',
-                        fillOpacity: 0.35,
-                        map: map,
-                        center: {
-                            lat: '.$stand->latitude.',
-                            lng: '.$stand->longitude.'
-                        },
-                        radius: 40
-                    });';
-                }
-
-                if($stand->isOccupied()){
-
-                    echo '
-                    new MapLabel({
-                        text: "'.$stand->occupier->callsign.'",
-                        position: new google.maps.LatLng(
-                            '.$stand->occupier->latitude.',
-                            '.$stand->occupier->longitude.'
-                        ),
-                        map: map,
-                        fontSize: 12,
-                        strokeWeight: 2
-                    });
+                    L.circle(['.$stand->latitude.', '.$stand->longitude.'], {
+                        color: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
+                        fillColor: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
+                        fillOpacity: 0.25,
+                        radius: 15
+                    })
+                    .addTo(map)
+                    .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>C</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                    .on("mouseover", function (e) { this.openPopup(); })
+                    .on("mouseout", function (e) { this.closePopup(); });
                     ';
-
                 }
-
             ?>
 
         </script>
