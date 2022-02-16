@@ -28,13 +28,13 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-        <script src="js/leaflet-tilelayer-colorfilter.min.js"></script>
 
         <!-- GMaps & Labels -->
         <script src="https://maps.googleapis.com/maps/api/js?key="></script>
         <script src="js/maplabel-min.js"></script>        
     </head>
     <body>
+        <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
 
@@ -99,38 +99,10 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
             </div>
         </nav>
 
+        <!-- Map -->
         <div id="map"></div>
 
-        <div class="container">
-            <!--
-            <div class="row mt-4">
-                <div class="col d-flex flex-column justify-content-center">                   
-                    <table id="standsTable" class="table table-responsive table-sm text-center align-self-center table-striped">
-                        <thead>
-                        <tr>
-                            <th>Stand</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                foreach ($StandStatus->stands() as $stand) {
-                                    echo '
-                                    <tr>
-                                        <td>'.$stand->getName().'</td>
-                                        <td>C</td>
-                                        <td>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</td>
-                                    </tr>
-                                    ';
-                                }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
-        </div>
-
+        <!-- Footer -->
         <footer>
             <a href="https://vatsim-scandinavia.org" target="_blank">
                 <img src="img/vatsca-logo-negative.svg" height="75">
@@ -139,7 +111,7 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
 
         <!-- Map Script -->
         <script>
-            var map = L.map('map').setView([60.28909078470454, 5.227381717245824], 17);
+            var map = L.map('map').setView([60.28909078470454, 5.227381717245824], 16);
             L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 17,
                 subdomains:['mt0','mt1','mt2','mt3'],
@@ -164,7 +136,6 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
             ?>
 
         </script>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>
