@@ -5,11 +5,53 @@
  */
 
 use CobaltGrid\VatsimStandStatus\StandStatus;
-
 require_once '../vendor/autoload.php';
 
-$StandStatus = new StandStatus(60.28909078470454, 5.227381717245824, StandStatus::COORD_FORMAT_DECIMAL);
-$StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")->parseData();
+$airport = false;
+$localData = false;
+$airportData = [];
+$negativeData = false;
+
+// Define airport
+if(isset($_GET["icao"])){
+    $airport = strtolower($_GET["icao"]);
+} else {
+    $airport = "engm";
+}
+
+// Do we have local data for that airport? If yes, load our quality ensured .json, otherwise load from OSM
+if(isset($airport) && file_exists('data/'.$airport.'.json')){
+    $localData = true;
+    $airportData = json_decode(file_get_contents('data/'.$airport.'.json'), true);
+
+    $StandStatus = new StandStatus($airportData["airport"]["latitude"], $airportData["airport"]["longitude"], StandStatus::COORD_FORMAT_DECIMAL);
+    $StandStatus->setMaxDistanceFromAirport(4)->loadStandDataFromArray($airportData["stands"])->parseData();
+} else {
+
+    // Load airport data
+    $allAirports = json_decode(file_get_contents("data/airports.json"), true);
+
+    $latitude = "";
+    $longitude = "";
+
+    foreach($allAirports as $data){
+        if($data["ident"] == strtoupper($airport)){
+            $latitude = $data["latitude_deg"];
+            $longitude = $data["longitude_deg"];
+        }
+    }
+
+    // Load the data from OSM, if exists
+    try {
+        $StandStatus = new StandStatus($latitude, $longitude, StandStatus::COORD_FORMAT_DECIMAL);
+        $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
+    } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
+        $negativeData = true;
+    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
+        
+    }
+    
+}
 
 ?>
 
@@ -95,6 +137,24 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
             </div>
         </nav>
 
+        <?php
+
+            if($negativeData){
+                echo '
+                <div class="alert alert-danger" role="alert">
+                    No stand data is available for this airport.
+                </div>
+                ';
+            } elseif(!$localData){
+                echo '
+                <div class="alert alert-warning" role="alert">
+                    Warning: This airport\'s data source is not quality ensured.
+                </div>
+                ';
+            }
+
+        ?>
+
         <!-- Map -->
         <div id="map"></div>
 
@@ -107,7 +167,7 @@ $StandStatus->setMaxDistanceFromAirport(2)->fetchAndLoadStandDataFromOSM("ENBR")
 
         <!-- Map Script -->
         <script>
-            var map = L.map('map').setView([60.28909078470454, 5.227381717245824], 16);
+            <?php echo 'var map = L.map("map").setView(['.$latitude.', '.$longitude.'], 16);' ?>
             L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 17,
                 subdomains:['mt0','mt1','mt2','mt3'],

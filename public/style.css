@@ -6,13 +6,18 @@
     background-color: #011328 !important;
 }
 
-#map{
-    height: calc(100vh - 70px - 105px);
-    width: 100%;
+.alert{
+    width: 40%;
+    position: absolute;
+    left: calc(50vw - 20%);
+    top: 5vh;
+    z-index: 1000;
+    text-align: center;
 }
 
-#search{
-    
+#map{
+    height: calc(100vh - 63px - 105px);
+    width: 100%;
 }
 
 footer{
