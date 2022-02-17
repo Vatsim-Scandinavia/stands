@@ -1,0 +1,46 @@
+{
+    "Denmark": {
+        "EKCH": {
+            "icao": "EKCH",
+            "city": "Copenhagen",
+            "verified": false
+        }
+    },
+
+    "Finland": {
+        "EFHK": {
+            "icao": "EFHK",
+            "city": "Helsinki",
+            "verified": false
+        }
+    },
+
+    "Iceland": {
+        "BIKF": {
+            "icao": "BIKF",
+            "city": "Keflavik",
+            "verified": false
+        }
+    },
+
+    "Norway": {
+        "ENGM": {
+            "icao": "ENGM",
+            "city": "Oslo",
+            "verified": false
+        },
+        "ENBR": {
+            "icao": "ENBR",
+            "city": "Bergen",
+            "verified": true
+        }
+    },
+
+    "Sweden": {
+        "ESSA": {
+            "icao": "ESSA",
+            "city": "Stockholm",
+            "verified": false
+        }
+    }
+}

@@ -7,55 +7,73 @@
 use CobaltGrid\VatsimStandStatus\StandStatus;
 require_once '../vendor/autoload.php';
 
+$indexes = json_decode(file_get_contents("data/index.json"));
 $airport = false;
-$localData = false;
-$airportData = [];
-$negativeData = false;
+$airportCords = [];
 
-// Define airport
-if(isset($_GET["icao"])){
-    $airport = strtolower($_GET["icao"]);
+$alertChooseAirport = false;
+$alertNotFound = false;
+$alertNoData = false;
+$alertNotVerified = true;
+
+// Define airport from GET
+$searchInput = substr(filter_input(INPUT_GET, 'icao', FILTER_SANITIZE_EMAIL), 0, 4);
+if(isset($searchInput) && !empty($searchInput)){
+    $airport = strtolower($searchInput);
 } else {
-    $airport = "engm";
+    $alertChooseAirport = true;
 }
 
 // Do we have local data for that airport? If yes, load our quality ensured .json, otherwise load from OSM
-if(isset($airport) && file_exists('data/'.$airport.'.json')){
-    $localData = true;
-    $airportData = json_decode(file_get_contents('data/'.$airport.'.json'), true);
+if(isset($airport) && $airport && file_exists('data/'.$airport.'.json')){
 
-    $StandStatus = new StandStatus($airportData["airport"]["latitude"], $airportData["airport"]["longitude"], StandStatus::COORD_FORMAT_DECIMAL);
+    $airportData = json_decode(file_get_contents('data/'.$airport.'.json'), true);
+    $airportCords = [$airportData["airport"]["latitude"], $airportData["airport"]["longitude"]];
+
+    $StandStatus = new StandStatus($airportCords[0], $airportCords[1], StandStatus::COORD_FORMAT_DECIMAL);
     $StandStatus->setMaxDistanceFromAirport(4)->loadStandDataFromArray($airportData["stands"])->parseData();
+
 } else {
 
-    // Load airport data
+    // Load airports database
     $allAirports = json_decode(file_get_contents("data/airports.json"), true);
 
-    $latitude = "";
-    $longitude = "";
-    $found = false;
-
+    // Find the airport's data
     foreach($allAirports as $data){
         if($data["ident"] == strtoupper($airport)){
-            $latitude = $data["latitude_deg"];
-            $longitude = $data["longitude_deg"];
-            $found = true;
+            $airportCords = [$data["latitude_deg"], $data["longitude_deg"]];
             break;
         }
     }
 
-    if($found){
-        // Load the data from OSM, if exists
-        try {
-            $StandStatus = new StandStatus($latitude, $longitude, StandStatus::COORD_FORMAT_DECIMAL);
-            $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
-        } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
-            $negativeData = true;
-        } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
-            // Continue and skip, this is unverified data source anyway
-        }
+    // Load the data from OSM, if exists
+    try {
+        $StandStatus = new StandStatus($airportCords[0], $airportCords[1], StandStatus::COORD_FORMAT_DECIMAL);
+        $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
+    } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
+        $alertNoData = true;
+    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
+        // Continue and skip, this is unverified data source anyway
+    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidICAOCodeException $e){
+        // Airport doesn't exist
+        $airport = false;
+        $alertNotFound = true;
     }
     
+}
+
+// Check if the current airport is verified data, otherwise show warning
+if($airport){
+    foreach($indexes as $index){
+        foreach($index as $a){
+            if($a->icao == strtoupper($airport)){
+                if($a->verified == true){
+                    $alertNotVerified = false;
+                    break;
+                }
+            }
+        }        
+    }
 }
 
 ?>
@@ -82,7 +100,7 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
             <div class="container">
 
                 <a class="navbar-brand" href="/">
-                    <img src="img/division-square.png" alt="" height="25" class="d-inline-block align-text-top">
+                    <img src="img/square-logo.png" alt="" height="25" class="d-inline-block align-text-top">
                     Stands
                 </a>
 
@@ -91,52 +109,33 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
                 </button>
                 <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Denmark
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="?icao=ekch">EKCH - Copenhagen</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Finland
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="?icao=efhk">EFHK - Helsinki</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Iceland
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="?icao=bikf">BIKF - Keflavik</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Norway
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="?icao=engm">ENGM - Oslo</a></li>
-                            <li><a class="dropdown-item" href="?icao=enbr">ENBR - Bergen</a></li>
-                            <li><a class="dropdown-item" href="?icao=enva">ENVA - Trondheim</a></li>
-                            <li><a class="dropdown-item" href="?icao=enzv">ENZV - Stavanger</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sweden
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="?icao=essa">ESSA - Stockholm</a></li>
-                        </ul>
-                    </li>
+
+                    <?php
+                        foreach($indexes as $country => $index){
+                            echo '
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                '.$country.'
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            ';
+
+                            foreach($index as $a){
+                                echo '
+                                    <li><a class="dropdown-item" href="?icao='.$a->icao.'">'.strtoupper($a->icao).' - '.$a->city.'</a></li>
+                                ';
+                            }
+
+                            echo '
+                            </ul>
+                            </li>
+                            ';
+                        }
+                    ?>
+
                 </ul>
                 <form class="d-flex">
-                    <input id="search" name="icao" class="form-control form-control-sm" type="search" placeholder="Search for ICAO" aria-label="Search">
+                    <input id="search" name="icao" class="form-control form-control-sm" type="search" placeholder="Search for ICAO" maxlength="4" aria-label="Search">
                 </form>
                 </div>
             </div>
@@ -144,19 +143,25 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
 
         <?php
 
-            if(!$found){
+            if($alertChooseAirport){
+                echo '
+                <div class="alert alert-info" role="alert">
+                    Choose or search for airport above
+                </div>
+                ';
+            } elseif($alertNotFound){
                 echo '
                 <div class="alert alert-danger" role="alert">
                     Airport not found
                 </div>
                 ';
-            } elseif($negativeData){
+            } elseif($alertNoData){
                 echo '
                 <div class="alert alert-danger" role="alert">
                     No stand data is available for this airport.
                 </div>
                 ';
-            } elseif(!$localData){
+            } elseif($alertNotVerified){
                 echo '
                 <div class="alert alert-warning" role="alert">
                     Warning: This airport\'s data source is not quality ensured.
@@ -172,7 +177,7 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
         <!-- Footer -->
         <footer>
             <a href="https://vatsim-scandinavia.org" target="_blank">
-                <img src="img/vatsca-logo-negative.svg" height="75">
+                <img src="img/negative-logo.svg" height="75">
             </a>
         </footer>
 
@@ -180,10 +185,12 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
         <script>
             <?php 
 
-                if($found){
-                    echo 'var map = L.map("map").setView(['.$latitude.', '.$longitude.'], 16);';
+                if($airport){
+                    // Create map based on airport coords
+                    echo 'var map = L.map("map").setView(['.$airportCords[0].', '.$airportCords[1].'], 16);';
                 } else {
-                    echo 'var map = L.map("map").setView([0,0], 16);';
+                    // Show map over Scandinavia
+                    echo 'var map = L.map("map").setView([61.269332358502595, 11.51592413253783], 5);';
                 }
 
             ?>
@@ -194,20 +201,23 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
             }).addTo(map);
 
             <?php
-                foreach($StandStatus->stands() as $stand){
-                    echo '
-                    L.circle(['.$stand->latitude.', '.$stand->longitude.'], {
-                        color: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
-                        fillColor: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
-                        fillOpacity: 0.25,
-                        radius: 15
-                    })
-                    .addTo(map)
-                    .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>C</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
-                    .on("mouseover", function (e) { this.openPopup(); })
-                    .on("mouseout", function (e) { this.closePopup(); });
-                    ';
+                if($airport){
+                    foreach($StandStatus->stands() as $stand){
+                        echo '
+                        L.circle(['.$stand->latitude.', '.$stand->longitude.'], {
+                            color: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
+                            fillColor: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
+                            fillOpacity: 0.25,
+                            radius: 15
+                        })
+                        .addTo(map)
+                        .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>C</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                        .on("mouseover", function (e) { this.openPopup(); })
+                        .on("mouseout", function (e) { this.closePopup(); });
+                        ';
+                    }
                 }
+                
             ?>
 
         </script>
