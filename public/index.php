@@ -33,22 +33,27 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
 
     $latitude = "";
     $longitude = "";
+    $found = false;
 
     foreach($allAirports as $data){
         if($data["ident"] == strtoupper($airport)){
             $latitude = $data["latitude_deg"];
             $longitude = $data["longitude_deg"];
+            $found = true;
+            break;
         }
     }
 
-    // Load the data from OSM, if exists
-    try {
-        $StandStatus = new StandStatus($latitude, $longitude, StandStatus::COORD_FORMAT_DECIMAL);
-        $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
-    } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
-        $negativeData = true;
-    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
-        
+    if($found){
+        // Load the data from OSM, if exists
+        try {
+            $StandStatus = new StandStatus($latitude, $longitude, StandStatus::COORD_FORMAT_DECIMAL);
+            $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
+        } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
+            $negativeData = true;
+        } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
+            // Continue and skip, this is unverified data source anyway
+        }
     }
     
 }
@@ -139,7 +144,13 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
 
         <?php
 
-            if($negativeData){
+            if(!$found){
+                echo '
+                <div class="alert alert-danger" role="alert">
+                    Airport not found
+                </div>
+                ';
+            } elseif($negativeData){
                 echo '
                 <div class="alert alert-danger" role="alert">
                     No stand data is available for this airport.
@@ -167,7 +178,15 @@ if(isset($airport) && file_exists('data/'.$airport.'.json')){
 
         <!-- Map Script -->
         <script>
-            <?php echo 'var map = L.map("map").setView(['.$latitude.', '.$longitude.'], 16);' ?>
+            <?php 
+
+                if($found){
+                    echo 'var map = L.map("map").setView(['.$latitude.', '.$longitude.'], 16);';
+                } else {
+                    echo 'var map = L.map("map").setView([0,0], 16);';
+                }
+
+            ?>
             L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 17,
                 subdomains:['mt0','mt1','mt2','mt3'],
