@@ -27,7 +27,7 @@
         "ENGM": {
             "icao": "ENGM",
             "city": "Oslo",
-            "verified": false
+            "verified": true
         },
         "ENBR": {
             "icao": "ENBR",
