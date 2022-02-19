@@ -20,8 +20,12 @@
 }
 
 #map{
-    height: calc(100vh - 63px - 105px);
+    height: calc(100vh - 56px - 105px);
     width: 100%;
+}
+
+#search{
+    margin-bottom: -16px;
 }
 
 footer{

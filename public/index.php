@@ -152,7 +152,7 @@ if($airport){
             if($alertChooseAirport){
                 echo '
                 <div class="alert alert-info" role="alert">
-                    Choose or search for airport above
+                    Choose or search for airport
                 </div>
                 ';
             } elseif($alertNotFound){
