@@ -60,6 +60,10 @@ if(isset($airport) && $airport && file_exists('data/'.$airport.'.json')){
             $airport = false;
             $alertNotFound = true;
         }
+    } else {
+        // Airport doesn't exist
+        $airport = false;
+        $alertNotFound = true;
     }
     
 }
