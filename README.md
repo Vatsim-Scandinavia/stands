@@ -5,6 +5,7 @@ Created by [Daniel L.](https://github.com/blt950) (1352906), based on the [stand
 # Installing
 - To install the website, you require PHP 7.4 or greater.
 - When the content is installed, use `composer install` to install the required dependencies.
+- Make sure the `/vendor/cobaltgrid/vatsim-stand-status/storage/data` folder is writeable for data
 - Done!
 
 # Configuring
