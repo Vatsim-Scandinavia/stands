@@ -29,3 +29,12 @@ footer{
     text-align: center;
     background-color: #011328;
 }
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) { 
+
+    .alert{
+        top: 10vh;
+    }
+
+}
