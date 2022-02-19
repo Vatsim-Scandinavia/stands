@@ -46,18 +46,20 @@ if(isset($airport) && $airport && file_exists('data/'.$airport.'.json')){
         }
     }
 
-    // Load the data from OSM, if exists
-    try {
-        $StandStatus = new StandStatus($airportCords[0], $airportCords[1], StandStatus::COORD_FORMAT_DECIMAL);
-        $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
-    } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
-        $alertNoData = true;
-    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
-        // Continue and skip, this is unverified data source anyway
-    } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidICAOCodeException $e){
-        // Airport doesn't exist
-        $airport = false;
-        $alertNotFound = true;
+    // If we didn't find airport or not set, load data from OSM if any
+    if(!empty($airportCords)){
+        try {
+            $StandStatus = new StandStatus($airportCords[0], $airportCords[1], StandStatus::COORD_FORMAT_DECIMAL);
+            $StandStatus->setMaxDistanceFromAirport(4)->fetchAndLoadStandDataFromOSM($airport)->parseData();
+        } catch(CobaltGrid\VatsimStandStatus\Exceptions\NoStandDataException $e) {
+            $alertNoData = true;
+        } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidStandException $e) {
+            // Continue and skip, this is unverified data source anyway
+        } catch(CobaltGrid\VatsimStandStatus\Exceptions\InvalidICAOCodeException $e){
+            // Airport doesn't exist
+            $airport = false;
+            $alertNotFound = true;
+        }
     }
     
 }
