@@ -33,6 +33,16 @@
             "icao": "ENBR",
             "city": "Bergen",
             "verified": true
+        },
+        "ENVA": {
+            "icao": "ENVA",
+            "city": "Trondheim",
+            "verified": true
+        },
+        "ENZV": {
+            "icao": "ENZV",
+            "city": "Stavanger",
+            "verified": true
         }
     },
 

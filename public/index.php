@@ -28,7 +28,7 @@ if(isset($searchInput) && !empty($searchInput)){
 if(isset($airport) && $airport && file_exists('data/'.$airport.'.json')){
 
     $airportData = json_decode(file_get_contents('data/'.$airport.'.json'), true);
-    $airportCords = [$airportData["airport"]["latitude"], $airportData["airport"]["longitude"]];
+    $airportCords = [$airportData["airport"]["latitude"], $airportData["airport"]["longitude"], $airportData["stands"]];
 
     $StandStatus = new StandStatus($airportCords[0], $airportCords[1], StandStatus::COORD_FORMAT_DECIMAL);
     $StandStatus->setMaxDistanceFromAirport(4)->loadStandDataFromArray($airportData["stands"])->parseData();
@@ -203,15 +203,55 @@ if($airport){
             <?php
                 if($airport){
                     foreach($StandStatus->stands() as $stand){
+
+                        $category = null;
+                        $radius = 24;
+
+                        // If airport stands data are supplied
+                        if(isset($airportCords[2])){
+
+                            // Set category tag based on supplied data
+                            foreach($airportCords[2] as $sd){
+                                if($sd[0] == $stand->id){
+                                    $category = $sd[3];
+                                    break;
+                                }
+                            }
+
+                            // Set radius based on stand category
+                            switch($category){
+                                case "A": $radius = 7; break;
+                                case "B": $radius = 12; break;
+                                case "C": $radius = 18; break;
+                                case "D": $radius = 26; break;
+                                case "E": $radius = 32; break;
+                                case "F": $radius = 40; break;
+                            }
+
+                        }
+
                         echo '
                         L.circle(['.$stand->latitude.', '.$stand->longitude.'], {
                             color: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
                             fillColor: '.($stand->isOccupied() ? '"#f31e23"' : '"#35ee34"').',
                             fillOpacity: 0.25,
-                            radius: 15
+                            radius: '.$radius.'
                         })
                         .addTo(map)
-                        .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>C</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                        ';
+
+                        if($category){
+                            echo '
+                            .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>'.$category.'</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                            ';
+                        } else {
+                            echo '
+                            .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                            ';
+                        }
+                        
+
+                        echo '
                         .on("mouseover", function (e) { this.openPopup(); })
                         .on("mouseout", function (e) { this.closePopup(); });
                         ';
