@@ -50,7 +50,7 @@
         "ESSA": {
             "icao": "ESSA",
             "city": "Stockholm",
-            "verified": false
+            "verified": true
         }
     }
 }
