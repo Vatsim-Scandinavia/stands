@@ -257,7 +257,7 @@ if($airport){
                             ';
                         } elseif($wingspan){
                             echo '
-                            .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Wingspan</th><th>'.round($wingspan).'m</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                            .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Wingspan</th><th>max '.round($wingspan).'m</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
                             ';
                         } else {
                             echo '
