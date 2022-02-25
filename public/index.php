@@ -211,15 +211,17 @@ if($airport){
                     foreach($StandStatus->stands() as $stand){
 
                         $category = null;
+                        $wingspan = null;
                         $radius = 24;
 
                         // If airport stands data are supplied
                         if(isset($airportCords[2])){
 
-                            // Set category tag based on supplied data
+                            // Set category and wingspan tag based on supplied data
                             foreach($airportCords[2] as $sd){
                                 if($sd[0] == $stand->id){
                                     $category = $sd[3];
+                                    $wingspan = $sd[4];
                                     break;
                                 }
                             }
@@ -233,6 +235,9 @@ if($airport){
                                 case "E": $radius = 32; break;
                                 case "F": $radius = 40; break;
                             }
+
+                            // Set wing radius to wingspan variable if exists
+                            if($wingspan){ $radius = $wingspan/2; }
 
                         }
 
@@ -249,6 +254,10 @@ if($airport){
                         if($category){
                             echo '
                             .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Category</th><th>'.$category.'</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
+                            ';
+                        } elseif($wingspan){
+                            echo '
+                            .bindPopup("<table class=\"table\"><tr><th class=\"fw-normal\">Stand</th><th>'.$stand->getName().'</th></tr><tr><th class=\"fw-normal\">Wingspan</th><th>'.round($wingspan).'m</th></tr><tr><th class=\"fw-normal\">Status</th><th>'.($stand->isOccupied() ? "<span class='text-danger'>Occupied (".$stand->occupier->callsign.")</span>" : "<span class='text-success'>Available</span>").'</th></tr></table>")
                             ';
                         } else {
                             echo '
