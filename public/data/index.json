@@ -19,7 +19,7 @@
         "BIKF": {
             "icao": "BIKF",
             "city": "Keflavik",
-            "verified": false
+            "verified": true
         }
     },
 
