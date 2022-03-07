@@ -193,7 +193,7 @@ if($airport){
 
                 if($airport){
                     // Create map based on airport coords
-                    echo 'var map = L.map("map").setView(['.$airportCords[0].', '.$airportCords[1].'], 16);';
+                    echo 'var map = L.map("map").setView(['.$airportCords[0].', '.$airportCords[1].'], 15);';
                 } else {
                     // Show map over Scandinavia
                     echo 'var map = L.map("map").setView([61.269332358502595, 11.51592413253783], 5);';
