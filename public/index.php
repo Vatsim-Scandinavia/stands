@@ -234,6 +234,7 @@ if($airport){
                                 case "D": $radius = 26; break;
                                 case "E": $radius = 32; break;
                                 case "F": $radius = 40; break;
+                                case "H": $radius = 15; break;
                             }
 
                             // Set wing radius to wingspan variable if exists
