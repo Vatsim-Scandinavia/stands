@@ -3,7 +3,22 @@
         "EKCH": {
             "icao": "EKCH",
             "city": "Copenhagen",
-            "verified": false
+            "verified": true
+        },
+        "EKBI": {
+            "icao": "EKBI",
+            "city": "Billund",
+            "verified": true
+        },
+        "EKAH": {
+            "icao": "EKAH",
+            "city": "Aarhus",
+            "verified": true
+        },
+        "EKYT": {
+            "icao": "EKYT",
+            "city": "Aalborg",
+            "verified": true
         }
     },
 
