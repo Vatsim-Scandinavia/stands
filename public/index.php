@@ -141,7 +141,7 @@ if($airport){
 
                 </ul>
                 <form class="d-flex">
-                    <input id="search" name="icao" class="form-control form-control-sm" type="search" placeholder="Search for ICAO" maxlength="4" aria-label="Search">
+                    <input id="search" name="icao" class="form-control form-control-sm" type="search" placeholder="Search for any ICAO" maxlength="4" aria-label="Search">
                 </form>
                 </div>
             </div>
