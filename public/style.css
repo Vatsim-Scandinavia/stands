@@ -14,7 +14,7 @@
     width: 40%;
     position: absolute;
     left: calc(50vw - 20%);
-    top: 5vh;
+    top: calc(56px + 10px);
     z-index: 410;
     text-align: center;
 }
@@ -32,13 +32,4 @@ footer{
     padding: 15px;
     text-align: center;
     background-color: #011328;
-}
-
-/* Small devices (landscape phones, less than 768px) */
-@media (max-width: 767.98px) { 
-
-    .alert{
-        top: 10vh;
-    }
-
 }
