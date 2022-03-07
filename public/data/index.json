@@ -66,6 +66,27 @@
             "icao": "ESSA",
             "city": "Stockholm",
             "verified": true
+        },
+        "ESGG": {
+            "icao": "ESGG",
+            "city": "Göteborg",
+            "verified": true
+        },
+        "ESMS": {
+            "icao": "ESMS",
+            "city": "Malmö",
+            "verified": true
+        },
+
+        "ESSB": {
+            "icao": "ESSB",
+            "city": "Bromma",
+            "verified": true
+        },
+        "ESPA": {
+            "icao": "ESPA",
+            "city": "Luleå",
+            "verified": true
         }
     }
 }
