@@ -2,7 +2,7 @@
     "Denmark": {
         "EKCH": {
             "icao": "EKCH",
-            "city": "Copenhagen",
+            "city": "Copenhagen Kastrup",
             "verified": true
         },
         "EKBI": {
@@ -30,7 +30,7 @@
     "Finland": {
         "EFHK": {
             "icao": "EFHK",
-            "city": "Helsinki",
+            "city": "Helsinki Vantaa",
             "verified": true
         }
     },
@@ -51,22 +51,22 @@
     "Norway": {
         "ENGM": {
             "icao": "ENGM",
-            "city": "Oslo",
+            "city": "Oslo Gardermoen",
             "verified": true
         },
         "ENBR": {
             "icao": "ENBR",
-            "city": "Bergen",
+            "city": "Bergen Flesland",
             "verified": true
         },
         "ENVA": {
             "icao": "ENVA",
-            "city": "Trondheim",
+            "city": "Trondheim Værnes",
             "verified": true
         },
         "ENZV": {
             "icao": "ENZV",
-            "city": "Stavanger",
+            "city": "Stavanger Sola",
             "verified": true
         }
     },
@@ -84,7 +84,7 @@
         },
         "ESGG": {
             "icao": "ESGG",
-            "city": "Göteborg",
+            "city": "Göteborg Landvetter",
             "verified": true
         },
         "ESMS": {
