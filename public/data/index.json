@@ -74,7 +74,7 @@
     "Sweden": {
         "ESSA": {
             "icao": "ESSA",
-            "city": "Stockholm",
+            "city": "Stockholm Arlanda",
             "verified": true
         },
         "ESGG": {
@@ -90,7 +90,7 @@
 
         "ESSB": {
             "icao": "ESSB",
-            "city": "Bromma",
+            "city": "Stockholm Bromma",
             "verified": true
         },
         "ESPA": {
