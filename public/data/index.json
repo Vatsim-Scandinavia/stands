@@ -77,6 +77,11 @@
             "city": "Stockholm Arlanda",
             "verified": true
         },
+        "ESSB": {
+            "icao": "ESSB",
+            "city": "Stockholm Bromma",
+            "verified": true
+        },
         "ESGG": {
             "icao": "ESGG",
             "city": "Göteborg",
@@ -85,12 +90,6 @@
         "ESMS": {
             "icao": "ESMS",
             "city": "Malmö",
-            "verified": true
-        },
-
-        "ESSB": {
-            "icao": "ESSB",
-            "city": "Stockholm Bromma",
             "verified": true
         },
         "ESPA": {
