@@ -68,6 +68,11 @@
             "icao": "ENZV",
             "city": "Stavanger Sola",
             "verified": true
+        },
+        "ENTC": {
+            "icao": "ENTC",
+            "city": "Tromsø Langnes",
+            "verified": true
         }
     },
 
