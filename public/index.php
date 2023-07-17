@@ -20,6 +20,12 @@ $alertNotFound = false;
 $alertNoData = false;
 $alertNotVerified = true;
 
+// Check if frameless version is requested
+$frameless = false;
+if(isset($_GET["frameless"]) && $_GET["frameless"] == "true"){
+    $frameless = true;
+}
+
 // Define airport from GET
 $searchInput = substr(filter_input(INPUT_GET, 'icao', FILTER_SANITIZE_EMAIL), 0, 4);
 if(isset($searchInput) && !empty($searchInput)){
@@ -103,6 +109,9 @@ if($airport){
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+        <link rel="stylesheet" href="//unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css" type="text/css">
+        <script src="//unpkg.com/leaflet-gesture-handling"></script>
+
         <?php
             if(isset($_ENV['APP_TRACKING_SCRIPT']) && !empty($_ENV['APP_TRACKING_SCRIPT'])){
                 echo $_ENV['APP_TRACKING_SCRIPT'];
@@ -111,7 +120,7 @@ if($airport){
     </head>
     <body>
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark <?php $frameless == true ? print('frameless') : ''; ?>">
             <div class="container">
 
                 <a class="navbar-brand" href="/">
@@ -187,10 +196,10 @@ if($airport){
         ?>
 
         <!-- Map -->
-        <div id="map"></div>
+        <div id="map" class="<?php $frameless == true ? print('frameless') : ''; ?>"></div>
 
         <!-- Footer -->
-        <footer>
+        <footer class="<?php $frameless == true ? print('frameless') : ''; ?>">
             <a href="https://vatsim-scandinavia.org" target="_blank">
                 <img src="img/negative-logo.svg" height="75">
             </a>
@@ -200,19 +209,24 @@ if($airport){
         <script>
             <?php 
 
+                $mapSettings = "";
+                if($frameless){
+                    $mapSettings = "gestureHandling: true";
+                }
+
                 if($airport){
                     // Create map based on airport coords
-                    echo 'var map = L.map("map").setView(['.$airportCords[0].', '.$airportCords[1].'], 15);';
+                    echo 'var map = L.map("map", {'.$mapSettings.'}).setView(['.$airportCords[0].', '.$airportCords[1].'], 15);';
                 } else {
                     // Show map over Scandinavia
-                    echo 'var map = L.map("map").setView([61.269332358502595, 11.51592413253783], 5);';
+                    echo 'var map = L.map("map", {'.$mapSettings.'}).setView([61.269332358502595, 11.51592413253783], 5);';
                 }
 
             ?>
             L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 18,
                 subdomains:['mt0','mt1','mt2','mt3'],
-                attribution: 'Data &copy; VATSCA, OpenStreetMap/OurAirports Contributors'
+                attribution: 'Data &copy; VATSCA, OpenStreetMap/OurAirports Contributors',
             }).addTo(map);
 
             <?php
