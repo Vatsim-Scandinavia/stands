@@ -3,12 +3,13 @@ version: '3'
 services:
   web:
     container_name: stands
-    image: vatsca/apache:php-7.4
+    image: ghcr.io/vatsim-scandinavia/stands:latest
     ports:
-        - 5060:80
-        - 5061:443
+        - 8080:80
+        - 8443:443
     extra_hosts:
         - "host.docker.internal:host-gateway"
-    volumes:
-      - ./:/var/www/html
-      - ./apache:/var/www/logs
+    #environment:
+    #  - APP_TRACKING_SCRIPT="<script>console.log('Insert your tracking script here or remove this variable alltogether.')</script>"
+    #volumes:
+    #  - ./:/app/
