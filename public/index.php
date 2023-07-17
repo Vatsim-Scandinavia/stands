@@ -7,7 +7,12 @@
 use CobaltGrid\VatsimStandStatus\StandStatus;
 require_once '../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable('../');
+$repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
+    ->addAdapter(Dotenv\Repository\Adapter\EnvConstAdapter::class)
+    ->addWriter(Dotenv\Repository\Adapter\PutenvAdapter::class)
+    ->immutable()
+    ->make();
+$dotenv = Dotenv\Dotenv::create($repository, '../');
 $dotenv->load();
 
 $indexes = json_decode(file_get_contents("data/index.json"));
@@ -112,8 +117,8 @@ if($airport){
         <script src="//unpkg.com/leaflet-gesture-handling"></script>
 
         <?php
-            if(isset($_ENV['APP_TRACKING_SCRIPT']) && !empty($_ENV['APP_TRACKING_SCRIPT'])){
-                echo $_ENV['APP_TRACKING_SCRIPT'];
+            if(getenv('APP_TRACKING_SCRIPT') && !empty(getenv('APP_TRACKING_SCRIPT'))){
+                echo str_replace('"', '', strval(getenv('APP_TRACKING_SCRIPT')));
             }
         ?>     
     </head>
