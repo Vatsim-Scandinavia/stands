@@ -5,11 +5,10 @@
  */
 
 use CobaltGrid\VatsimStandStatus\StandStatus;
-use Symfony\Component\Dotenv\Dotenv;
 require_once '../vendor/autoload.php';
 
-$dotenv = new Dotenv();
-$dotenv->load('../.env');
+$dotenv = Dotenv\Dotenv::createImmutable('../');
+$dotenv->load();
 
 $indexes = json_decode(file_get_contents("data/index.json"));
 $airport = false;
