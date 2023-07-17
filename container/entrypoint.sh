@@ -10,3 +10,4 @@ if [ ! -f "$SELF_SIGNED_KEY" ] || [ ! -f "$SELF_SIGNED_CERT" ]; then
 fi
 
 exec docker-php-entrypoint "$@"
+
