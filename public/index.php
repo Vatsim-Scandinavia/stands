@@ -9,7 +9,7 @@ use Symfony\Component\Dotenv\Dotenv;
 require_once '../vendor/autoload.php';
 
 $dotenv = new Dotenv();
-$dotenv->load(__DIR__.'/../.env');
+$dotenv->load('../.env');
 
 $indexes = json_decode(file_get_contents("data/index.json"));
 $airport = false;

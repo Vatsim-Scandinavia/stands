@@ -11,6 +11,8 @@ Created by [Daniel L.](https://github.com/blt950) (1352906), based on the [stand
 - Start the container and setup your reverse proxy
 - Done!
 
+*You may also use the docker-compose file in the repository to get started, just tweak it to your liking.*
+
 ## Manual
 - To install the website, you require PHP 7.4 or greater.
 - When the content is installed, use `composer install` to install the required dependencies.
