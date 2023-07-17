@@ -230,7 +230,12 @@ if($airport){
                             foreach($airportCords[2] as $sd){
                                 if($sd[0] == $stand->id){
                                     $category = $sd[3];
-                                    $wingspan = $sd[4];
+
+                                    // If there is a wingspan instead of code letter
+                                    if(isset($sd[4])){
+                                        $wingspan = $sd[4];
+                                    }
+
                                     break;
                                 }
                             }
