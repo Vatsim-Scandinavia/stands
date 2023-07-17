@@ -30,6 +30,7 @@ WORKDIR /app
 
 RUN composer install --no-dev --no-interaction --prefer-dist
 RUN mkdir -p /app/storage/logs/
+RUN chown www-data:www-data -R /app/vendor/cobaltgrid/vatsim-stand-status/storage/data /app/vendor/skymeyer/vatsimphp/app/cache /app/vendor/skymeyer/vatsimphp/app/logs
 
 # Wrap around the default PHP entrypoint with a custom entrypoint
 COPY ./container/entrypoint.sh /usr/local/bin/service-entrypoint
