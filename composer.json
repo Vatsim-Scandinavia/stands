@@ -1,5 +1,6 @@
 {
     "require": {
-        "cobaltgrid/vatsim-stand-status": "^2.1"
+        "cobaltgrid/vatsim-stand-status": "^2.1",
+        "symfony/dotenv": "^6.3"
     }
 }
