@@ -1,0 +1,5 @@
+# Docker itself and relevant files
+Dockerfile
+.env
+# No, no node modules.
+node_modules
