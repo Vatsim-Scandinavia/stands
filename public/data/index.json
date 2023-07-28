@@ -30,7 +30,32 @@
     "Finland": {
         "EFHK": {
             "icao": "EFHK",
-            "city": "Helsinki Vantaa",
+            "city": "Helsinki",
+            "verified": true
+        },
+        "EFKU": {
+            "icao": "EFKU",
+            "city": "Kuopio",
+            "verified": true
+        },
+        "EFOU": {
+            "icao": "EFOU",
+            "city": "Oulu",
+            "verified": true
+        },
+        "EFRO": {
+            "icao": "EFRO",
+            "city": "Rovaniemi",
+            "verified": true
+        },
+        "EFTP": {
+            "icao": "EFTP",
+            "city": "Tampere-Pirkkala",
+            "verified": true
+        },
+        "EFTU": {
+            "icao": "EFTU",
+            "city": "Turku",
             "verified": true
         }
     },
