@@ -33,6 +33,11 @@
             "city": "Helsinki",
             "verified": true
         },
+        "EFKT": {
+            "icao": "EFKT",
+            "city": "Kittilä",
+            "verified": true
+        },
         "EFKU": {
             "icao": "EFKU",
             "city": "Kuopio",
