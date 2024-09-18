@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a33e1d0dc8e321d46f014609c37af53d",
+    "content-hash": "14653c0621ed83cb54ce0a2c352c43eb",
     "packages": [
         {
             "name": "cobaltgrid/vatsim-stand-status",
@@ -881,16 +881,16 @@
         },
         {
             "name": "skymeyer/vatsimphp",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/skymeyer/Vatsimphp.git",
-                "reference": "60eb40c0bcf7dd58060ae529073fa25eb455dedd"
+                "reference": "26b3e9ec5e7842965870a285d59d809bde836734"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/skymeyer/Vatsimphp/zipball/60eb40c0bcf7dd58060ae529073fa25eb455dedd",
-                "reference": "60eb40c0bcf7dd58060ae529073fa25eb455dedd",
+                "url": "https://api.github.com/repos/skymeyer/Vatsimphp/zipball/26b3e9ec5e7842965870a285d59d809bde836734",
+                "reference": "26b3e9ec5e7842965870a285d59d809bde836734",
                 "shasum": ""
             },
             "require": {
@@ -933,9 +933,9 @@
             ],
             "support": {
                 "issues": "https://github.com/skymeyer/Vatsimphp/issues",
-                "source": "https://github.com/skymeyer/Vatsimphp/tree/2.0.3"
+                "source": "https://github.com/skymeyer/Vatsimphp/tree/2.0.4"
             },
-            "time": "2021-01-06T09:05:19+00:00"
+            "time": "2024-09-15T18:33:23+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1003,80 +1003,6 @@
                 }
             ],
             "time": "2023-05-23T14:45:45+00:00"
-        },
-        {
-            "name": "symfony/dotenv",
-            "version": "v6.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dotenv.git",
-                "reference": "ceadb434fe2a6763a03d2d110441745834f3dd1e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/ceadb434fe2a6763a03d2d110441745834f3dd1e",
-                "reference": "ceadb434fe2a6763a03d2d110441745834f3dd1e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "conflict": {
-                "symfony/console": "<5.4",
-                "symfony/process": "<5.4"
-            },
-            "require-dev": {
-                "symfony/console": "^5.4|^6.0",
-                "symfony/process": "^5.4|^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Dotenv\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Registers environment variables from a .env file",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "dotenv",
-                "env",
-                "environment"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/dotenv/tree/v6.3.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-04-21T14:41:17+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1419,5 +1345,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
