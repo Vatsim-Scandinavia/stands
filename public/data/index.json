@@ -103,6 +103,11 @@
             "icao": "ENTC",
             "city": "Tromsø Langnes",
             "verified": true
+        },
+        "ENCN": {
+            "icao": "ENCN",
+            "city": "Kristiansand Kjevik",
+            "verified": true
         }
     },
 
