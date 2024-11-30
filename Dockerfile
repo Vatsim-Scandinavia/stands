@@ -21,6 +21,10 @@ COPY ./container/configs/apache.conf /etc/apache2/apache2.conf
 # Custom PHP configuration based on $PHP_INI_DIR/php.ini-production
 COPY ./container/configs/php.ini /usr/local/etc/php/php.ini
 
+# Install PHP extension(s)
+COPY --from=mlocati/php-extension-installer:2.2.19 /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions opcache
+
 # Install composer
 COPY --from=docker.io/library/composer:latest /usr/bin/composer /usr/bin/composer
 # Copy over the application, static files, plus the ones built/transpiled by Mix in the frontend stage further up

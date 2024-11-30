@@ -19,6 +19,11 @@ Created by [Daniel L.](https://github.com/blt950) (1352906), based on the [stand
 - Make sure the `/vendor/cobaltgrid/vatsim-stand-status/storage/data` and `vendor/skymeyer/vatsimphp/app/cache` and `vendor/skymeyer/vatsimphp/app/logs` folders are writeable
 - Done!
 
+# Caching
+This application uses the OPCache to cache the compiled PHP code. Default setting is for production which means that the cache is not cleared automatically. To clear the cache, you need to restart the container if you change a file.
+
+For development, change `validate_timestamps` to `1` in the `/usr/local/etc/php/php.ini` file to make sure that the cache is cleared automatically when a file is changed.
+
 # Configuring
 
 ## Environment variables
