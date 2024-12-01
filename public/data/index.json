@@ -108,6 +108,11 @@
             "icao": "ENCN",
             "city": "Kristiansand Kjevik",
             "verified": true
+        },
+        "ENTO": {
+            "icao": "ENTO",
+            "city": "Sandefjord Torp",
+            "verified": true
         }
     },
 
