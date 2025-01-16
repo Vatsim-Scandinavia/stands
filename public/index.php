@@ -179,7 +179,7 @@ if($airport){
                 echo '
                 <div class="alert alert-warning" role="alert">
                     <a target="_blank" href="https://vatsim-radar.com/">VATSIM Radar has now the same functionality to find stands.</a>
-                    <br>It's also even more detailed with a linked Navigraph subscription.
+                    <br>It\'s also even more detailed with a linked Navigraph subscription.
                 </div>
                 ';
             } elseif($alertNotFound){
