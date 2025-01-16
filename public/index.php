@@ -170,11 +170,6 @@ if($airport){
         </nav>
 
         <?php
-
-            <div class="alert alert-info" role="alert">
-                Choose or search for airport
-            </div>
-
             if($alertChooseAirport){
                 echo '
                 <div class="alert alert-warning" role="alert">
